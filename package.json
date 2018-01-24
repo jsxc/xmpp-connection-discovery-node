@@ -1,0 +1,23 @@
+{
+  "name": "@jsxc/xmpp-connection-discovery",
+  "version": "0.1.0",
+  "description": "Use RFC6120 and XEP-0156 to get XMPP connection services.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsxc/xmpp-connection-discovery-node.git"
+  },
+  "author": "Klaus Herberth <klaus@jsxc.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jsxc/xmpp-connection-discovery-node/issues"
+  },
+  "homepage": "https://github.com/jsxc/xmpp-connection-discovery-node#readme",
+  "dependencies": {
+    "request": "^2.83.0",
+    "xml2js": "^0.4.19"
+  }
+}
