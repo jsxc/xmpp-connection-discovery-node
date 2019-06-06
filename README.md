@@ -1,4 +1,4 @@
-[![npm version](https://badge.fury.io/js/consistent-color-generation.svg)](https://www.npmjs.com/package/consistent-color-generation)
+[![npm version](https://badge.fury.io/js/xmpp-connection-discovery.svg)](https://www.npmjs.com/package/xmpp-connection-discovery)
 
 # XMPP connection discovery
 :mag: Use RFC6120 and XEP-0156 to discover XMPP connection services.
@@ -9,7 +9,7 @@
 - [Query Host Metadata](https://xmpp.org/extensions/xep-0156.html#http)
 
 ## How to use
-Install this module as usual with `npm install xmpp-connection-discovery` and import the script:
+Install this module as usual with `yarn add xmpp-connection-discovery` and import the script:
 ```
 const discoverXMPPServices = require('xmpp-connection-discovery');
 ```
