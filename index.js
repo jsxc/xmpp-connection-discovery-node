@@ -10,7 +10,7 @@ const XRD_NAMESPACE = 'http://docs.oasis-open.org/ns/xri/xrd-1.0';
 function querySRV(domain) {
    return new Promise((resolve) => {
       dns.resolveSrv(`_xmpp-client._tcp.${domain}`, (err, records) => {
-         if (err) resolve([]);
+         if (err || !records) return resolve([]);
 
          let services = records.map((record) => {
             return {
@@ -31,7 +31,7 @@ function querySRV(domain) {
 function queryTXT(domain) {
    return new Promise((resolve) => {
       dns.resolveTxt(`_xmppconnect.${domain}`, (err, records) => {
-         if (err) resolve([]);
+         if (err || !records) return resolve([]);
 
          let services = [];
 
