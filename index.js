@@ -20,7 +20,7 @@ function querySRV(domain) {
             };
          });
 
-         resolve(services);
+         return resolve(services);
       });
    });
 }
@@ -48,7 +48,7 @@ function queryTXT(domain) {
             }
          }
 
-         resolve(services);
+         return resolve(services);
       });
    });
 }
@@ -59,7 +59,7 @@ function queryTXT(domain) {
 function queryHostMeta(domain) {
    return new Promise((resolve) => {
       request(`https://${domain}/.well-known/host-meta`, (err, response, body) => {
-         if (!response || response.statusCode !== 200 || !body) resolve([]);
+         if (!response || response.statusCode !== 200 || !body) return resolve([]);
 
          parseXmlString(body, (err, result) => {
             if (!result) return resolve([]);
@@ -87,7 +87,7 @@ function queryHostMeta(domain) {
                });
             }
 
-            resolve(services);
+            return resolve(services);
          });
       })
    });
