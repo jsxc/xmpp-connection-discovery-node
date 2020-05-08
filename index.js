@@ -1,5 +1,5 @@
 const dns = require('dns');
-const request = require('request');
+const axios = require('axios').default;
 const parseXmlString = require('xml2js').parseString;
 
 const XRD_NAMESPACE = 'http://docs.oasis-open.org/ns/xri/xrd-1.0';
@@ -56,40 +56,48 @@ function queryTXT(domain) {
 /**
  * Query Web Host Metadata according to {@link https://xmpp.org/extensions/xep-0156.html#http}.
  */
-function queryHostMeta(domain) {
-   return new Promise((resolve) => {
-      request(`https://${domain}/.well-known/host-meta`, (err, response, body) => {
-         if (!response || response.statusCode !== 200 || !body) return resolve([]);
+async function queryHostMeta(domain) {
+   let response;
 
-         parseXmlString(body, (err, result) => {
-            if (!result) return resolve([]);
+   try {
+      response = await axios(`https://${domain}/.well-known/host-meta`);
+   } catch(err) {
+      return [];
+   }
 
-            let XRD = result.XRD;
+   if (!response || response.status !== 200 || !response.data) {
+      return [];
+   }
 
-            if (!XRD || !XRD.$ || XRD.$.xmlns !== XRD_NAMESPACE) return resolve([]);
+   return new Promise(resolve => {
+      parseXmlString(response.data, (err, result) => {
+         if (!result) return resolve([]);
 
-            if (!XRD.Link) return resolve([]);
+         let XRD = result.XRD;
 
-            let services = [];
+         if (!XRD || !XRD.$ || XRD.$.xmlns !== XRD_NAMESPACE) return resolve([]);
 
-            for (let link of XRD.Link) {
-               if (!link.$ || !link.$.href || !link.$.rel) continue;
+         if (!XRD.Link) return resolve([]);
 
-               let href = link.$.href;
-               let rel = link.$.rel;
-               let matches = rel.match(/^urn:xmpp:alt-connections:(xbosh|websocket)$/);
+         let services = [];
 
-               if (!matches) continue;
+         for (let link of XRD.Link) {
+            if (!link.$ || !link.$.href || !link.$.rel) continue;
 
-               services.push({
-                  server: href,
-                  protocol: matches[1]
-               });
-            }
+            let href = link.$.href;
+            let rel = link.$.rel;
+            let matches = rel.match(/^urn:xmpp:alt-connections:(xbosh|websocket)$/);
 
-            return resolve(services);
-         });
-      })
+            if (!matches) continue;
+
+            services.push({
+               server: href,
+               protocol: matches[1]
+            });
+         }
+
+         return resolve(services);
+      });
    });
 }
 
